@@ -4,37 +4,48 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var (
+	db   *gorm.DB
+	once sync.Once
+)
 
-func ConnectDB() {
-	fmt.Println("Corriendo")
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("No .env file found")
-	}
+// This function initializes the database connection. If a connection
+// already exists, it returns a reference to the existing connection.
+func GetDB() *gorm.DB {
+	once.Do(func() {
+		fmt.Println("Initializing DB connection...")
 
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
+		err := godotenv.Load()
+		if err != nil {
+			log.Println("No .env file found")
+		}
 
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disabled",
-		host, user, password, dbname, port,
-	)
+		host := os.Getenv("DB_HOST")
+		port := os.Getenv("DB_PORT")
+		user := os.Getenv("DB_USER")
+		password := os.Getenv("DB_PASSWORD")
+		dbname := os.Getenv("DB_NAME")
 
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
-	}
+		dsn := fmt.Sprintf(
+			"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+			host, user, password, dbname, port,
+		)
 
-	DB = database
-	log.Println("Database connected!!!")
+		database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err != nil {
+			log.Fatal("Failed to connect to database:", err)
+		}
+
+		db = database
+		log.Println("Database connected!!")
+	})
+
+	return db
 }
