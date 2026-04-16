@@ -16,8 +16,8 @@ type Resource struct {
 	FolderID *uuid.UUID `gorm:"type:uuid"`
 	UserID   uuid.UUID  `gorm:"type:uuid;not null"`
 
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `gorm:"default:now()"`
+	UpdatedAt time.Time `gorm:"default:now()"`
 
 	User   User    `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
 	Folder *Folder `gorm:"foreignKey:FolderID;constraint:OnDelete:SET NULL"`
