@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/google/uuid"
-	"github.com/mobml/models"
+	"github.com/mobml/sciobox/models"
 	"gorm.io/gorm"
 )
 

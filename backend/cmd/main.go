@@ -1,24 +1,32 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/gofiber/fiber/v3"
-	"github.com/mobml/config"
-	"github.com/mobml/models"
+	"github.com/joho/godotenv"
+	"github.com/mobml/sciobox/cmd/app"
 )
 
 func main() {
-	app := fiber.New()
-	db := config.GetDB()
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found, using system environment variables")
+	}
 
-	db.AutoMigrate(
-		&models.User{},
-		&models.Folder{},
-		&models.Resource{},
-	)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+		log.Println("PORT not found in .env, defaulting to 3000")
+	}
 
-	app.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("Hello, World!")
+	server := fiber.New(fiber.Config{
+		AppName: "sciobox API v1.0",
 	})
 
-	app.Listen(":3000")
+	app.InitializeApp(server)
+
+	log.Printf("Server running on port %s", port)
+	log.Fatal(server.Listen(":" + port))
 }

@@ -6,7 +6,6 @@ import (
 	"os"
 	"sync"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,11 +20,6 @@ var (
 func GetDB() *gorm.DB {
 	once.Do(func() {
 		fmt.Println("Initializing DB connection...")
-
-		err := godotenv.Load()
-		if err != nil {
-			log.Println("No .env file found")
-		}
 
 		host := os.Getenv("DB_HOST")
 		port := os.Getenv("DB_PORT")
