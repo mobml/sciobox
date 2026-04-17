@@ -33,12 +33,16 @@ func InitializeApp(app *fiber.App) {
 	// Initialize layers (Dependency Injection)
 	// --- Repositories ---
 	userRepo := repository.NewUserRepository(db)
+	folderRepo := repository.NewFolderRepository(db)
+	resourceRepo := repository.NewResourceRepository(db)
 
 	// --- Services ---
 	userSvc := services.NewUserService(userRepo, jwtSecret)
+	folderSvc := services.NewFolderService(folderRepo)
+	resourceSvc := services.NewResourceService(resourceRepo, folderRepo)
 
-	// 5. Configurar Rutas y Handlers
-	routes.SetupRoutes(app, userSvc, jwtSecret)
+	// Configure routes and handlers
+	routes.SetupRoutes(app, userSvc, folderSvc, resourceSvc, jwtSecret)
 
 	log.Println("Application layers initialized successfully")
 }
