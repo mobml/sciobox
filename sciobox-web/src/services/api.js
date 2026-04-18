@@ -51,3 +51,12 @@ export const updateResourceRequest = async (token, id, data) => {
     body: JSON.stringify(data)
   });
 };
+
+export const deleteResourceRequest = async (token, id) => {
+  await fetch(API + "/resources/" + id, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+};

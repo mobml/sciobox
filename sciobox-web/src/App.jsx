@@ -4,7 +4,8 @@ import {
   registerRequest, 
   getResourcesRequest, 
   createResourceRequest, 
-  updateResourceRequest 
+  updateResourceRequest,
+  deleteResourceRequest
 } from "./services/api";
 
 const API = "http://localhost:3000/api/v1";
@@ -73,21 +74,26 @@ function App() {
     loadResources();
   }
 
+  const updateResource = async () => {
+    await updateResourceRequest(token, editingResource.ID, {
+      title: editTitle,
+      description: editDescription,
+      url: editUrl
+    });
+    setEditingResource(null);
+    loadResources();
+  };
+
+const deleteResource = async (id) => {
+  await deleteResourceRequest(token, id);
+  loadResources();
+}
+
+
   // Runs loadResources when the component mounts and whenever the token changes
   useEffect(() => {
     loadResources();
   }, [token]);
-
-
-const updateResource = async () => {
-  await updateResourceRequest(token, editingResource.ID, {
-    title: editTitle,
-    description: editDescription,
-    url: editUrl
-  });
-  setEditingResource(null);
-  loadResources();
-};
 
   //function to open the modal
 
@@ -168,30 +174,31 @@ const updateResource = async () => {
               {r.URL}
             </a>
             <button onClick={() => openEdit(r)}>Editar</button>
+            <button onClick={() => deleteResource(r.ID)} style={{ marginLeft: 10, color: "red" }}>Eliminar</button>
             <hr />
           </li>
         ))}
       </ul>
       {editingResource && (
-  <div style={{
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  }}>
-    <div style={{ background: "white", padding: 20 }}>
-      <h3>Editar recurso</h3>
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0,0,0,0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+        <div style={{ background: "white", padding: 20 }}>
+          <h3>Editar recurso</h3>
 
-      <input
-        value={editTitle}
-        onChange={e => setEditTitle(e.target.value)}
-        placeholder="Title"
-      />
+          <input
+            value={editTitle}
+            onChange={e => setEditTitle(e.target.value)}
+            placeholder="Title"
+          />
       <br />
 
       <input
