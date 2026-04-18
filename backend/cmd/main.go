@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/joho/godotenv"
 	"github.com/mobml/sciobox/cmd/app"
 )
@@ -24,6 +25,12 @@ func main() {
 	server := fiber.New(fiber.Config{
 		AppName: "sciobox API v1.0",
 	})
+
+	server.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+	}))
 
 	app.InitializeApp(server)
 
