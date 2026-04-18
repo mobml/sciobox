@@ -1,4 +1,11 @@
 import { useState, useEffect } from "react";
+import { 
+  loginRequest, 
+  registerRequest, 
+  getResourcesRequest, 
+  createResourceRequest, 
+  updateResourceRequest 
+} from "./services/api";
 
 const API = "http://localhost:3000/api/v1";
 
@@ -6,6 +13,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [isLogin, setIsLogin] = useState(true);
 
+  // auth form fields states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,18 +27,12 @@ function App() {
   const [editDescription, setEditDescription] = useState("");
   const [editUrl, setEditUrl] = useState("");
 
-  // 🔐 LOGIN
+  // LOGIN
   const login = async () => {
-    const res = await fetch(API + "/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
+    const data = await loginRequest(email, password);
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Error en login");
+    if (!data.token) {
+      alert("Error");
       return;
     }
 
@@ -38,87 +40,63 @@ function App() {
     setToken(data.token);
   };
 
-  // 📝 REGISTER
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+  };
+
+  // REGISTER
   const register = async () => {
-    const res = await fetch(API + "/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password })
-    });
+    const data = await registerRequest(name, email, password);
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Error en registro");
-      return;
+    if(data.error) {
+      alert(data.error);
     }
 
     alert("Usuario creado, ahora inicia sesión");
     setIsLogin(true);
-  };
+  }
 
-  // 📚 GET RESOURCES
+  // GET RESOURCES
   const loadResources = async () => {
     if (!token) return;
 
-    const res = await fetch(API + "/resources", {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    });
-
-    const data = await res.json();
-    console.log(data);
+    const data = await getResourcesRequest(token);
+    console.log("data:", data);
     setResources(data);
-  };
+  }
 
-  // ➕ CREATE RESOURCE
+  // CREATE RESOURCE
   const createResource = async () => {
-    await fetch(API + "/resources", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token
-      },
-      body: JSON.stringify({ url })
-    });
-
+    await createResourceRequest(token, url);
     setUrl("");
     loadResources();
-  };
+  }
 
+  // Runs loadResources when the component mounts and whenever the token changes
   useEffect(() => {
     loadResources();
   }, [token]);
 
-  //function to update the resource
-  const updateResource = async () => {
-  await fetch(API + "/resources/" + editingResource.ID, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({
-      title: editTitle,
-      description: editDescription,
-      url: editUrl
-    })
-  });
 
+const updateResource = async () => {
+  await updateResourceRequest(token, editingResource.ID, {
+    title: editTitle,
+    description: editDescription,
+    url: editUrl
+  });
   setEditingResource(null);
   loadResources();
 };
 
-
   //function to open the modal
 
   const openEdit = (r) => {
-  setEditingResource(r);
-  setEditTitle(r.Title || "");
-  setEditDescription(r.Description || "");
-  setEditUrl(r.URL || "");
-};
+    setEditingResource(r);
+    setEditTitle(r.Title || "");
+    setEditDescription(r.Description || "");
+    setEditUrl(r.URL || "");
+  };
 
   // 🔐 AUTH VIEW
   if (!token) {
@@ -164,9 +142,10 @@ function App() {
     );
   }
 
-  // 📚 MAIN VIEW
+  // MAIN VIEW
   return (
     <div style={{ padding: 20 }}>
+      <button onClick={logout}>Cerrar sesión</button>
       <h2>Resources</h2>
 
       <input
