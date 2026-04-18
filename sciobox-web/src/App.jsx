@@ -7,17 +7,12 @@ import {
   updateResourceRequest,
   deleteResourceRequest
 } from "./services/api";
+import AuthForm from "./components/AuthForm";
 
 const API = "http://localhost:3000/api/v1";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [isLogin, setIsLogin] = useState(true);
-
-  // auth form fields states
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const [url, setUrl] = useState("");
   const [resources, setResources] = useState([]);
@@ -28,35 +23,10 @@ function App() {
   const [editDescription, setEditDescription] = useState("");
   const [editUrl, setEditUrl] = useState("");
 
-  // LOGIN
-  const login = async () => {
-    const data = await loginRequest(email, password);
-
-    if (!data.token) {
-      alert("Error");
-      return;
-    }
-
-    localStorage.setItem("token", data.token);
-    setToken(data.token);
-  };
-
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
   };
-
-  // REGISTER
-  const register = async () => {
-    const data = await registerRequest(name, email, password);
-
-    if(data.error) {
-      alert(data.error);
-    }
-
-    alert("Usuario creado, ahora inicia sesión");
-    setIsLogin(true);
-  }
 
   // GET RESOURCES
   const loadResources = async () => {
@@ -104,48 +74,9 @@ const deleteResource = async (id) => {
     setEditUrl(r.URL || "");
   };
 
-  // 🔐 AUTH VIEW
+  // AUTH VIEW
   if (!token) {
-    return (
-      <div style={{ padding: 20 }}>
-        <h2>{isLogin ? "Login" : "Register"}</h2>
-
-        {!isLogin && (
-          <>
-            <input
-              placeholder="name"
-              onChange={e => setName(e.target.value)}
-            />
-            <br />
-          </>
-        )}
-
-        <input
-          placeholder="email"
-          onChange={e => setEmail(e.target.value)}
-        />
-        <br />
-
-        <input
-          type="password"
-          placeholder="password"
-          onChange={e => setPassword(e.target.value)}
-        />
-        <br />
-
-        {isLogin ? (
-          <button onClick={login}>Login</button>
-        ) : (
-          <button onClick={register}>Register</button>
-        )}
-
-        <br /><br />
-
-        <button onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Ir a Register" : "Ir a Login"}
-        </button>
-      </div>
-    );
+    return <AuthForm setToken={setToken} />
   }
 
   // MAIN VIEW
