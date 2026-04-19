@@ -18,6 +18,7 @@ function AuthForm({ setToken }) {
         }
 
         localStorage.setItem("token", data.token);
+        localStorage.setItem("email", email);
         setToken(data.token);
     };
 

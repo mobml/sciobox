@@ -144,7 +144,10 @@ function Dashboard({ token, setToken }) {
                 createFolder={createFolder}
             />
             <div style={{ flex: 1, padding: 20 }}>
+                <p>{localStorage.getItem("email")}</p>
                 <button onClick={logout}>Cerrar sesión</button>
+                <br />
+                <br />
                 <h2>Resources</h2>
 
                 <input
