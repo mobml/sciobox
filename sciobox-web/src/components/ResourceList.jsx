@@ -1,4 +1,4 @@
-function ResourceList({ resources, openEdit, deleteResource }) {
+function ResourceList({ resources, openEdit, deleteResource, onMove }) {
   return (
     <ul>
         {resources.map(r => (
@@ -14,6 +14,7 @@ function ResourceList({ resources, openEdit, deleteResource }) {
             </a>
             <button onClick={() => openEdit(r)}>Editar</button>
             <button onClick={() => deleteResource(r.ID)} style={{ marginLeft: 10, color: "red" }}>Eliminar</button>
+            <button onClick={() => onMove(r)}>Mover a</button>
             <hr />
           </li>
         ))}

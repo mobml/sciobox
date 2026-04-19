@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Sidebar({ folders, onSelectFolder, createFolder }) {
+function Sidebar({ folders, setSelectedFolder, createFolder }) {
     const [newFolder, setNewFolder] = useState("");
     return (
         <div style={{
@@ -14,7 +14,7 @@ function Sidebar({ folders, onSelectFolder, createFolder }) {
 
         <div
             style={{ cursor: "pointer", marginBottom: 10 }}
-            onClick={() => onSelectFolder(null)}
+            onClick={() => setSelectedFolder(null)}
         >
         🏠 Inicio
         </div>
@@ -26,7 +26,7 @@ function Sidebar({ folders, onSelectFolder, createFolder }) {
             <div
                 key={f.ID}
                 style={{ cursor: "pointer", marginTop: 10 }}
-                onClick={() => onSelectFolder(f.ID)}
+                onClick={() => setSelectedFolder(f.ID)}
             >
                 📁 {f.Name}
             </div>

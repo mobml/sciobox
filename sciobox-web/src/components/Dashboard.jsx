@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ResourceList from "./ResourceList";
 import EditResourceModal from "./EditResourceModal";
+import MoveResourceDrawer from "./MoveResourceDrawer";
 import Sidebar from "./Sidebar";
 import {
   getResourcesRequest, 
@@ -27,6 +28,8 @@ function Dashboard({ token, setToken }) {
     //folder state
     const [folders, setFolders] = useState([]);
     const [selectedFolder, setSelectedFolder] = useState(null);
+
+    const [movingResource, setMovingResource] = useState(null);
 
 
     const logout = () => {
@@ -73,6 +76,17 @@ function Dashboard({ token, setToken }) {
             url: editUrl
         });
         setEditingResource(null);
+        loadResources();
+    };
+
+    const moveResource = async (folderId) => {
+        if (!movingResource) return;
+
+        await updateResourceRequest(token, movingResource.ID, {
+            folder_id: folderId
+        });
+
+        setMovingResource(null);
         loadResources();
     };
 
@@ -143,7 +157,8 @@ function Dashboard({ token, setToken }) {
                 <ResourceList 
                     resources={resources} 
                     openEdit={openEdit} 
-                    deleteResource={deleteResource} 
+                    deleteResource={deleteResource}
+                    onMove={(r) => setMovingResource(r)}
                 />
 
 
@@ -161,6 +176,13 @@ function Dashboard({ token, setToken }) {
                     editDescription={editDescription}
                     editUrl={editUrl}
                 />
+                )}
+                {movingResource && (
+                    <MoveResourceDrawer
+                        folders={folders}
+                        onMove={moveResource}
+                        onClose={() => setMovingResource(null)}
+                    />
                 )}
             </div>
         </div>    
