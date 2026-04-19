@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import ResourceList from "./ResourceList";
 import EditResourceModal from "./EditResourceModal";
+import Sidebar from "./Sidebar";
 import {
   getResourcesRequest, 
   createResourceRequest, 
   updateResourceRequest,
-  deleteResourceRequest
+  deleteResourceRequest,
+  createFolderRequest
 } from "../services/api";
 
 
@@ -22,6 +24,10 @@ function Dashboard({ token, setToken }) {
     const [editDescription, setEditDescription] = useState("");
     const [editUrl, setEditUrl] = useState("");
 
+    //folder state
+    const [folders, setFolders] = useState([]);
+    const [selectedFolder, setSelectedFolder] = useState(null);
+
 
     const logout = () => {
         localStorage.removeItem("token");
@@ -29,13 +35,30 @@ function Dashboard({ token, setToken }) {
     };
 
     //---------Resource CRUD operations---------
-    const loadResources = async () => {
+    /*const loadResources = async () => {
         if (!token) return;
 
         const data = await getResourcesRequest(token);
         console.log("data:", data);
         setResources(data);
-    }
+    }*/
+
+    const loadResources = async () => {
+        if (!token) return;
+
+        let data;
+
+        if (selectedFolder) {
+            const res = await fetch(API + "/resources/folder/" + selectedFolder, {
+                headers: { Authorization: "Bearer " + token }
+            });
+            data = await res.json();
+        } else {
+            data = await getResourcesRequest(token);
+        }
+
+        setResources(data);
+    };
 
     const createResource = async () => {
         await createResourceRequest(token, url);
@@ -59,9 +82,35 @@ function Dashboard({ token, setToken }) {
     }
     //---------End of Resource CRUD operations---------
 
+    //---------Folder CRUD operations---------
+    
+    const loadFolders = async () => {
+        const res = await fetch(API + "/folders", {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
+
+        const data = await res.json();
+        setFolders(data);
+    };
+
+    const createFolder = async (name) => {
+        await createFolderRequest(token, name);
+        loadFolders();
+    }
+    //---------End of Folder CRUD operations---------
+
+
+    useEffect(() => {
+        if (token) {
+            loadFolders();
+        }
+    }, [token]);
+
     useEffect(() => {
         loadResources();
-    }, [token]);
+    }, [selectedFolder, token]);
 
     //function to open the modal
     const openEdit = (r) => {
@@ -73,41 +122,48 @@ function Dashboard({ token, setToken }) {
 
 
     return (
-        <div style={{ padding: 20 }}>
-            <button onClick={logout}>Cerrar sesión</button>
-            <h2>Resources</h2>
+        <div style={{ display: "flex" }}>
 
-            <input
-                placeholder="URL"
-                value={url}
-                onChange={e => setUrl(e.target.value)}
+            <Sidebar 
+                folders={folders} 
+                setSelectedFolder={setSelectedFolder} 
+                createFolder={createFolder}
             />
-            <button onClick={createResource}>Guardar</button>
+            <div style={{ flex: 1, padding: 20 }}>
+                <button onClick={logout}>Cerrar sesión</button>
+                <h2>Resources</h2>
+
+                <input
+                    placeholder="URL"
+                    value={url}
+                    onChange={e => setUrl(e.target.value)}
+                />
+                <button onClick={createResource}>Guardar</button>
             
-            <ResourceList 
-                resources={resources} 
-                openEdit={openEdit} 
-                deleteResource={deleteResource} 
-            />
+                <ResourceList 
+                    resources={resources} 
+                    openEdit={openEdit} 
+                    deleteResource={deleteResource} 
+                />
 
 
-      {
-      // EDIT MODAL
-      }
-      {editingResource && (
-        <EditResourceModal
-            setEditTitle={setEditTitle}
-            setEditDescription={setEditDescription}
-            setEditUrl={setEditUrl}
-            setEditingResource={setEditingResource}
-            updateResource={updateResource}
-            editTitle={editTitle}
-            editDescription={editDescription}
-            editUrl={editUrl}
-        />
-      )}
-    </div>
-
+                {
+                // EDIT MODAL
+                }
+                {editingResource && (
+                <EditResourceModal
+                    setEditTitle={setEditTitle}
+                    setEditDescription={setEditDescription}
+                    setEditUrl={setEditUrl}
+                    setEditingResource={setEditingResource}
+                    updateResource={updateResource}
+                    editTitle={editTitle}
+                    editDescription={editDescription}
+                    editUrl={editUrl}
+                />
+                )}
+            </div>
+        </div>    
     );
 }
 

@@ -1,5 +1,7 @@
 const API = "http://localhost:3000/api/v1";
 
+// Authentication
+
 export const loginRequest = async (email, password) => {
   const res = await fetch(API + "/auth/login", {
     method: "POST",
@@ -9,6 +11,8 @@ export const loginRequest = async (email, password) => {
 
   return res.json();
 };
+
+// User registratios
 
 export const registerRequest = async (name, email, password) => {
   const res = await fetch(API + "/auth/register", {
@@ -58,5 +62,19 @@ export const deleteResourceRequest = async (token, id) => {
     headers: {
       Authorization: "Bearer " + token
     }
+  });
+};
+
+
+// Folders
+
+export const createFolderRequest = async (token, name) => {
+  await fetch(API + "/folders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ name })
   });
 };
