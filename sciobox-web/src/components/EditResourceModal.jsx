@@ -10,43 +10,46 @@ function EditResourceModal({
 
 }) {
     return (
-        <div style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-            }}>
-            <div style={{ background: "white", padding: 20 }}>
-                <h3>Editar recurso</h3>
+        <div className="fixed inset-0 flex justify-center items-center z-50">
+            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+            <div className="relative bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+                <h3 className="text-xl font-bold text-white mb-4">Editar recurso</h3>
 
                 <input
                     value={editTitle}
                     onChange={e => setEditTitle(e.target.value)}
                     placeholder="Title"
+                    className="w-full p-2 mb-4 rounded bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
-                <br />
 
                 <input
                     value={editDescription}
                     onChange={e => setEditDescription(e.target.value)}
                     placeholder="Description"
+                    className="w-full p-2 mb-4 rounded bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
-                <br />
 
                 <input
                     value={editUrl}
                     onChange={e => setEditUrl(e.target.value)}
                     placeholder="URL"
+                    className="w-full p-2 mb-4 rounded bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
-                <br /><br />
 
-                <button onClick={updateResource}>Guardar</button>
-                <button onClick={() => setEditingResource(null)}>Cancelar</button>
+                <div className="flex justify-end gap-4">
+                    <button 
+                        onClick={updateResource} 
+                        className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        onClick={() => setEditingResource(null)} 
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                        Cancelar
+                    </button>
+                </div>
             </div>
         </div>
     );

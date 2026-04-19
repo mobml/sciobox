@@ -136,59 +136,72 @@ function Dashboard({ token, setToken }) {
 
 
     return (
-        <div style={{ display: "flex" }}>
-
+        <div className="flex h-screen bg-gray-900 text-white">
             <Sidebar 
                 folders={folders} 
                 setSelectedFolder={setSelectedFolder} 
                 createFolder={createFolder}
             />
-            <div style={{ flex: 1, padding: 20 }}>
-                <p>{localStorage.getItem("email")}</p>
-                <button onClick={logout}>Cerrar sesión</button>
-                <br />
-                <br />
-                <h2>Resources</h2>
+            <div className="flex-1 flex flex-col">
+                <div className="bg-gray-900 p-6 border-b border-gray-800 sticky top-0 z-10">
+                    <div className="flex justify-end items-center gap-4 mb-4">
+                        <p className="text-sm text-gray-400">{localStorage.getItem("email")}</p>
+                        <button
+                            className="px-3 py-1 bg-red-500 hover:bg-red-600 text-sm rounded"
+                            onClick={logout}
+                        >
+                            Cerrar sesión
+                        </button>
+                    </div>
 
-                <input
-                    placeholder="URL"
-                    value={url}
-                    onChange={e => setUrl(e.target.value)}
-                />
-                <button onClick={createResource}>Guardar</button>
-            
-                <ResourceList 
-                    resources={resources} 
-                    openEdit={openEdit} 
-                    deleteResource={deleteResource}
-                    onMove={(r) => setMovingResource(r)}
-                />
+                    <h2 className="text-2xl font-bold mb-4">Resources</h2>
 
+                    <div className="flex items-center gap-2">
+                        <input
+                            placeholder="URL"
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
+                            className="flex-1 px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <button
+                            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded"
+                            onClick={createResource}
+                        >
+                            Guardar
+                        </button>
+                    </div>
+                </div>
 
-                {
-                // EDIT MODAL
-                }
-                {editingResource && (
-                <EditResourceModal
-                    setEditTitle={setEditTitle}
-                    setEditDescription={setEditDescription}
-                    setEditUrl={setEditUrl}
-                    setEditingResource={setEditingResource}
-                    updateResource={updateResource}
-                    editTitle={editTitle}
-                    editDescription={editDescription}
-                    editUrl={editUrl}
-                />
-                )}
-                {movingResource && (
-                    <MoveResourceDrawer
-                        folders={folders}
-                        onMove={moveResource}
-                        onClose={() => setMovingResource(null)}
+                <div className="flex-1 overflow-y-auto p-6">
+                    <ResourceList 
+                        resources={resources} 
+                        openEdit={openEdit} 
+                        deleteResource={deleteResource}
+                        onMove={(r) => setMovingResource(r)}
                     />
-                )}
+
+                    {editingResource && (
+                        <EditResourceModal
+                            setEditTitle={setEditTitle}
+                            setEditDescription={setEditDescription}
+                            setEditUrl={setEditUrl}
+                            setEditingResource={setEditingResource}
+                            updateResource={updateResource}
+                            editTitle={editTitle}
+                            editDescription={editDescription}
+                            editUrl={editUrl}
+                        />
+                    )}
+                    {movingResource && (
+                        <MoveResourceDrawer
+                            folders={folders}
+                            onMove={moveResource}
+                            onClose={() => setMovingResource(null)}
+                        />
+                    )}
+                </div>
             </div>
-        </div>    
+        </div>
     );
 }
 
