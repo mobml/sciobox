@@ -17,10 +17,11 @@ function Sidebar({ folders, setSelectedFolder, createFolder }) {
 
             <div className="flex-1 overflow-y-auto p-4">
                 <div
-                    className={`cursor-pointer px-2 py-1 rounded hover:bg-gray-800 text-gray-300 ${activeFolder === null ? 'bg-gray-800' : ''}`}
+                    className={`cursor-pointer px-2 py-1 rounded hover:bg-gray-800 text-gray-300 flex items-center gap-2 ${activeFolder === null ? 'bg-gray-800' : ''}`}
                     onClick={() => handleFolderClick(null)}
                 >
-                    🏠 Inicio
+                    <span className="material-symbols-outlined">home</span>
+                    <span>Inicio</span>
                 </div>
 
                 {/* FOLDERS */}
@@ -28,9 +29,10 @@ function Sidebar({ folders, setSelectedFolder, createFolder }) {
                     <div
                         key={f.ID}
                         onClick={() => handleFolderClick(f.ID)}
-                        className={`cursor-pointer px-2 py-1 rounded hover:bg-gray-800 text-gray-300 mt-1 ${activeFolder === f.ID ? 'bg-gray-800' : ''}`}
+                        className={`cursor-pointer px-2 py-1 rounded hover:bg-gray-800 text-gray-300 mt-1 flex items-center gap-2 ${activeFolder === f.ID ? 'bg-gray-800' : ''}`}
                     >
-                        📁 {f.Name}
+                        <span className="material-symbols-outlined">folder</span>
+                        <span>{f.Name}</span>
                     </div>
                 ))}
 
@@ -49,7 +51,7 @@ function Sidebar({ folders, setSelectedFolder, createFolder }) {
                             setNewFolder("");
                         }}
                     >
-                        +
+                        Crear carpeta
                     </button>
                 </div>
             </div>
