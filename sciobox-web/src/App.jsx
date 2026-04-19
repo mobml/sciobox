@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { 
-  loginRequest, 
-  registerRequest, 
+import {
   getResourcesRequest, 
   createResourceRequest, 
   updateResourceRequest,
   deleteResourceRequest
 } from "./services/api";
 import AuthForm from "./components/AuthForm";
+import ResourceList from "./components/ResourceList";
 
 const API = "http://localhost:3000/api/v1";
 
@@ -92,24 +91,12 @@ const deleteResource = async (id) => {
       />
       <button onClick={createResource}>Guardar</button>
 
-      <ul>
-        {resources.map(r => (
-          <li key={r.id}>
-            <strong>{r.Title}</strong>
-            <br />
-            <p>{r.Description}</p>
-            <br />
-            {r.ImageURL && <img src={r.ImageURL} width="100" />}
-            <br />
-            <a href={r.URL} target="_blank" rel="noreferrer">
-              {r.URL}
-            </a>
-            <button onClick={() => openEdit(r)}>Editar</button>
-            <button onClick={() => deleteResource(r.ID)} style={{ marginLeft: 10, color: "red" }}>Eliminar</button>
-            <hr />
-          </li>
-        ))}
-      </ul>
+      <ResourceList resources={resources} openEdit={openEdit} deleteResource={deleteResource} />
+
+
+      {
+      // EDIT MODAL
+      }
       {editingResource && (
         <div style={{
           position: "fixed",
