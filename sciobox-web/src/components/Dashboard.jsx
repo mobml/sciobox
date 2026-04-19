@@ -33,6 +33,7 @@ function Dashboard({ token, setToken }) {
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("email");
         setToken("");
     };
 
