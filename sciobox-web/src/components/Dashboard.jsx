@@ -11,7 +11,6 @@ import {
   createFolderRequest
 } from "../services/api";
 
-
 const API = "http://localhost:3000/api/v1";
 
 function Dashboard({ token, setToken }) {
@@ -97,7 +96,6 @@ function Dashboard({ token, setToken }) {
     //---------End of Resource CRUD operations---------
 
     //---------Folder CRUD operations---------
-    
     const loadFolders = async () => {
         const res = await fetch(API + "/folders", {
             headers: {
@@ -147,10 +145,13 @@ function Dashboard({ token, setToken }) {
                     <div className="flex justify-end items-center gap-4 mb-4">
                         <p className="text-sm text-gray-400">{localStorage.getItem("email")}</p>
                         <button
-                            className="px-3 py-1 bg-red-500 hover:bg-red-600 text-sm rounded"
+                            className="px-3 py-1 bg-red-500 hover:bg-red-600 text-sm rounded flex items-center gap-2"
                             onClick={logout}
                         >
-                            Cerrar sesión
+                            <span className="material-symbols-outlined">
+                                logout
+                            </span>
+                            Logout
                         </button>
                     </div>
 
