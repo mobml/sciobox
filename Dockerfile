@@ -1,5 +1,5 @@
 # ---------- 1. Build frontend ----------
-FROM node:20-alpine AS frontend
+FROM node:20-slim AS frontend
 WORKDIR /app
 
 COPY sciobox-web/ .
