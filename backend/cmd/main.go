@@ -26,11 +26,14 @@ func main() {
 		AppName: "sciobox API v1.0",
 	})
 
-	server.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
-	}))
+	if os.Getenv("ENV") == "development" {
+		log.Println("Running in development mode, enabling CORS for all origins")
+		server.Use(cors.New(cors.Config{
+			AllowOrigins: []string{"*"},
+			AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
+			AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		}))
+	}
 
 	app.InitializeApp(server)
 
