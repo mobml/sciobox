@@ -11,7 +11,10 @@ function EditResourceModal({
 }) {
     return (
         <div className="fixed inset-0 flex justify-center items-center z-50">
-            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+            <div 
+                className="absolute inset-0 bg-black/50"
+                onClick={() => setEditingResource(null)}
+                ></div>
             <div className="relative bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h3 className="text-xl font-bold text-white mb-4">Editar recurso</h3>
 
