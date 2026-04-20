@@ -1,5 +1,10 @@
 function MoveResourceDrawer({ folders, onMove, onClose }) {
   return (
+    <>
+    <div
+        className="fixed inset-0 bg-black/50 z-30"
+        onClick={onClose}
+      />
     <div className="fixed top-0 right-0 h-full w-80 bg-gray-800 shadow-lg p-4 z-40 overflow-y-auto">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-bold text-white">Mover a carpeta</h3>
@@ -32,6 +37,7 @@ function MoveResourceDrawer({ folders, onMove, onClose }) {
         </div>
       ))}
     </div>
+    </>
   );
 }
 
