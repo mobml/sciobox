@@ -34,7 +34,15 @@ cd sciobox
 
 ---
 
-### ▶️ 2. Ejecutar
+### 📁 2. Cambiar carpeta
+
+```bash
+cd sciobox
+```
+
+---
+
+### ▶️ 3. Ejecutar
 
 ```bash
 docker-compose up --build
@@ -48,7 +56,7 @@ sudo docker compose up --build
 
 ---
 
-### 🌐 3. Acceso
+### 🌐 4. Acceso
 
 ```
 http://127.0.0.1:3000
