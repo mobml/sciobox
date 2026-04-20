@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ResourceList from "./ResourceList";
 import EditResourceModal from "./EditResourceModal";
 import MoveResourceDrawer from "./MoveResourceDrawer";
@@ -14,6 +15,8 @@ import {
 const API = "http://localhost:3000/api/v1";
 
 function Dashboard({ token, setToken }) {
+    const navigate = useNavigate();
+
     const [url, setUrl] = useState("");
     const [resources, setResources] = useState([]);
     
@@ -36,6 +39,7 @@ function Dashboard({ token, setToken }) {
         localStorage.removeItem("token");
         localStorage.removeItem("email");
         setToken("");
+        navigate("/auth");
     };
 
     //---------Resource CRUD operations---------

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginRequest, registerRequest } from "../services/api";
 import "./AuthForm.css";
 
 function AuthForm({ setToken }) {
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -20,6 +22,8 @@ function AuthForm({ setToken }) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("email", email);
         setToken(data.token);
+        navigate("/dashboard");
+
     };
 
     const register = async () => {
