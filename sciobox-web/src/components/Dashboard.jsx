@@ -30,6 +30,7 @@ function Dashboard({ token, setToken }) {
 
     const [movingResource, setMovingResource] = useState(null);
 
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const logout = () => {
         localStorage.removeItem("token");
@@ -140,9 +141,17 @@ function Dashboard({ token, setToken }) {
                 folders={folders} 
                 setSelectedFolder={setSelectedFolder} 
                 createFolder={createFolder}
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
             />
             <div className="flex-1 flex flex-col">
                 <div className="bg-gray-900 p-6 border-b border-gray-800 sticky top-0 z-10">
+                    <button
+                        className="md:hidden text-gray-300 hover:text-white"
+                        onClick={() => setSidebarOpen(true)}
+                    >
+                        <span className="material-symbols-outlined text-3xl">menu</span>
+                    </button>
                     <div className="flex justify-end items-center gap-4 mb-4">
                         <p className="text-sm text-gray-400">{localStorage.getItem("email")}</p>
                         <button
