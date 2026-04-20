@@ -22,6 +22,11 @@ func GetDB() *gorm.DB {
 		fmt.Println("Initializing DB connection...")
 
 		host := os.Getenv("DB_HOST")
+
+		if host == "" {
+			host = "localhost"
+		}
+
 		port := os.Getenv("DB_PORT")
 		user := os.Getenv("DB_USER")
 		password := os.Getenv("DB_PASSWORD")

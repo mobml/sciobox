@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api/v1";
+const API = "/api/v1";
 
 // Authentication
 

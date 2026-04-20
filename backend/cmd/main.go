@@ -6,12 +6,13 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/static"
 	"github.com/joho/godotenv"
 	"github.com/mobml/sciobox/cmd/app"
 )
 
 func main() {
-	err := godotenv.Load()
+	err := godotenv.Load("../.env")
 	if err != nil {
 		log.Println("No .env file found, using system environment variables")
 	}
@@ -33,6 +34,10 @@ func main() {
 			AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
 			AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
 		}))
+	}
+
+	if os.Getenv("ENV") == "production" {
+		server.Use("/", static.New("./dist"))
 	}
 
 	app.InitializeApp(server)

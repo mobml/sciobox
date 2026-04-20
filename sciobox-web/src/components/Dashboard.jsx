@@ -12,7 +12,7 @@ import {
   createFolderRequest
 } from "../services/api";
 
-const API = "http://localhost:3000/api/v1";
+const API = "/api/v1";
 
 function Dashboard({ token, setToken }) {
     const navigate = useNavigate();
